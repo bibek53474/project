@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Fashion Retail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}"><i class="bi bi-bag-heart"></i> Fashion Retail</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#new-arrivals">New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#collections">Collections</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li sec:authorize="hasAnyRole('ADMIN', 'CUSTOMER', 'VENDOR')" class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">Admin Panel</a>
+                    </li>
+                    <li sec:authorize="hasAnyRole('CUSTOMER', 'ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/customer/dashboard}">Customer Area</a>
+                    </li>
+                    <li sec:authorize="hasAnyRole('VENDOR', 'ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/vendor/dashboard}">Vendor Area</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/register}">Register</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> 
+                            <span sec:authentication="name">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: inline;">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section" style="background-image: linear-gradient(135deg, rgba(102,126,234,0.9), rgba(118,75,162,0.9)), url('https://images.unsplash.com/photo-1520975962286-79c7f28d6f2b?q=80&w=1600&auto=format&fit=crop'); background-size: cover; background-position: center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center slide-up">
+                    <h1 class="display-4 fw-bold mb-3">Discover Your Style</h1>
+                    <p class="lead mb-4" style="font-size: 1.25rem; opacity: 0.95;">Timeless essentials and modern trends—crafted for every day.</p>
+                    <a href="#new-arrivals" class="btn btn-light btn-lg me-3 shadow-lg"><i class="bi bi-bag"></i> Shop New Arrivals</a>
+                    <a href="#collections" class="btn btn-outline-light btn-lg shadow-lg"><i class="bi bi-collection"></i> Explore Collections</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collections Section -->
+    <div id="collections" class="container my-5">
+        <div class="row text-center mb-4">
+            <div class="col-12">
+                <h2 class="fw-bold">Shop by Category</h2>
+                <p class="text-muted mb-0">Find the perfect piece for every occasion</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 feature-card">
+                    <img src="https://images.unsplash.com/photo-1520975774831-1e0b3c4f8c6a?q=80&w=1200&auto=format&fit=crop" class="card-img-top" style="height:180px;object-fit:cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Tops</h5>
+                        <p class="card-text text-muted">Everyday basics and statement pieces</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 feature-card">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1200&auto=format&fit=crop" class="card-img-top" style="height:180px;object-fit:cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Denim</h5>
+                        <p class="card-text text-muted">Classic fits with a modern touch</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 feature-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop" class="card-img-top" style="height:180px;object-fit:cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Footwear</h5>
+                        <p class="card-text text-muted">From casual to refined</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 feature-card">
+                    <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop" class="card-img-top" style="height:180px;object-fit:cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Accessories</h5>
+                        <p class="card-text text-muted">Finish every look effortlessly</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Arrivals -->
+    <div id="new-arrivals" class="container my-5">
+        <div class="row align-items-center mb-3">
+            <div class="col-12 col-lg-6">
+                <h2 class="fw-bold mb-1">New Arrivals</h2>
+                <p class="text-muted mb-3">Fresh styles, updated weekly</p>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="row g-2">
+                    <div class="col-12 col-sm-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input id="searchInput" type="text" class="form-control" placeholder="Search products...">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <select id="categoryFilter" class="form-select">
+                            <option>All</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <select id="sortSelect" class="form-select">
+                            <option value="featured">Featured</option>
+                            <option value="price_asc">Price: Low to High</option>
+                            <option value="price_desc">Price: High to Low</option>
+                            <option value="rating">Top Rated</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="productsGrid" class="row"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+        <div class="container text-center">
+            <p class="mb-1"><i class="bi bi-bag-heart"></i> &copy; 2024 Fashion Retail. All rights reserved.</p>
+            <small class="text-muted">This is a static demo. Products are loaded from JSON.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/fashion.js}"></script>
+</body>
+</html>
+

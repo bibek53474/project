@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - User Authentication System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi bi-shield-lock"></i> Auth System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/dashboard}">Dashboard</a>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">Admin Panel</a>
+                    </li>
+                    <li sec:authorize="hasAnyRole('CUSTOMER', 'ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/customer/dashboard}">Customer Area</a>
+                    </li>
+                    <li sec:authorize="hasAnyRole('VENDOR', 'ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/vendor/dashboard}">Vendor Area</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> 
+                            <span sec:authentication="name">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: inline;">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </h1>
+            </div>
+        </div>
+
+        <!-- User Info Card -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card fade-in">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <i class="bi bi-person-circle text-primary"></i> User Information
+                        </h5>
+                        <hr>
+                        <p class="card-text mb-2">
+                            <strong>Username:</strong> <span sec:authentication="name" class="text-primary">User</span>
+                        </p>
+                        <p class="card-text mb-0">
+                            <strong>Roles:</strong> 
+                            <span sec:authentication="authorities" class="badge bg-primary">Roles</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <i class="bi bi-shield-check text-success"></i> Account Status
+                        </h5>
+                        <hr>
+                        <p class="card-text mb-2">
+                            <span class="badge bg-success fs-6">Active</span>
+                        </p>
+                        <p class="card-text mb-0">
+                            <small class="text-muted">Your account is active and secure</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role-Based Quick Access -->
+        <div class="row">
+            <div sec:authorize="hasRole('ADMIN')" class="col-md-4 mb-3">
+                <div class="card feature-card border-primary fade-in">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shield-exclamation display-4 text-primary"></i>
+                        <h5 class="card-title mt-3 fw-bold">Admin Panel</h5>
+                        <p class="card-text">Access administrative features and user management</p>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-primary">
+                            <i class="bi bi-arrow-right-circle"></i> Go to Admin Panel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div sec:authorize="hasAnyRole('CUSTOMER', 'ADMIN')" class="col-md-4 mb-3">
+                <div class="card feature-card border-success fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-body text-center">
+                        <i class="bi bi-cart display-4 text-success"></i>
+                        <h5 class="card-title mt-3 fw-bold">Customer Area</h5>
+                        <p class="card-text">Access customer features and services</p>
+                        <a th:href="@{/customer/dashboard}" class="btn btn-success">
+                            <i class="bi bi-arrow-right-circle"></i> Go to Customer Area
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div sec:authorize="hasAnyRole('VENDOR', 'ADMIN')" class="col-md-4 mb-3">
+                <div class="card feature-card border-warning fade-in" style="animation-delay: 0.2s;">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shop display-4 text-warning"></i>
+                        <h5 class="card-title mt-3 fw-bold">Vendor Area</h5>
+                        <p class="card-text">Manage your vendor account and products</p>
+                        <a th:href="@{/vendor/dashboard}" class="btn btn-warning">
+                            <i class="bi bi-arrow-right-circle"></i> Go to Vendor Area
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="bi bi-shield-check"></i> &copy; 2024 User Authentication System. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+
